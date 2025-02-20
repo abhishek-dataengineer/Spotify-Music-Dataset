@@ -1,0 +1,53 @@
+CREATE TABLE low_popularity (
+    time_signature INT,
+    track_popularity INT,
+    speechiness FLOAT,
+    danceability FLOAT,
+    playlist_name TEXT,
+    track_artist TEXT,
+    duration_ms INT,
+    energy FLOAT,
+    playlist_genre TEXT,
+    playlist_subgenre TEXT,
+    track_name TEXT,
+    mode INT,
+    type TEXT,
+    track_album_release_date Date, 
+    id TEXT,
+    instrumentalness FLOAT,
+    track_album_id TEXT,
+    playlist_id TEXT,
+    track_id TEXT,
+    valence FLOAT,
+    key INT,
+    tempo FLOAT,
+    loudness FLOAT,
+    acousticness FLOAT,
+    liveness FLOAT,
+    track_album_name TEXT
+);
+
+
+-- try to load your csv file, if you gets error then follow the below scripts--
+ALTER TABLE low_popularity
+ALTER COLUMN track_album_release_date TYPE TEXT USING track_album_release_date::TEXT;
+
+
+
+--Note: -- after alter the table, load your csv file in your empty table that you created over there and proceed with below script --
+
+
+UPDATE low_popularity
+SET track_album_release_date = 
+    CASE 
+        WHEN track_album_release_date ~ '^\d{4}$' THEN track_album_release_date || '-01-01'
+        WHEN track_album_release_date ~ '^\d{4}-\d{2}$' THEN track_album_release_date || '-01'
+        ELSE track_album_release_date
+    END;
+
+
+ALTER TABLE low_popularity
+ALTER COLUMN track_album_release_date TYPE DATE USING track_album_release_date::DATE;
+
+
+select * from low_popularity
